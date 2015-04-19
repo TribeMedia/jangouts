@@ -14,7 +14,9 @@
     "janus-gateway": "https://github.com/meetecho/janus-gateway.git",
     "angular-block-ui": "~0.2.0",
     "lodash": "~3.6.0",
-    "ng-emoticons": "~2.0.0"
+    "ng-emoticons": "~2.0.0",
+    "wildemitter": "https://github.com/HenrikJoreteg/wildemitter.git#78ef41ae7b35403e804730c67b9b5cc0f58df7b4",
+    "hark": "https://github.com/otalk/hark.git#52595ccd06274ba51ca57b23821fa8a93ae646a7"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.4"
