@@ -54,10 +54,10 @@
         RoomService.getAvailableRooms(vm.room, roomNumber).then(function(rooms) {
           vm.rooms = rooms;
 
-          if (vm.room && rm.room > 0) {
+          if (vm.room && vm.room > 0) {
             var i = 0;
             for (i = 0; i < rooms.length; ++i) {
-                if (rooms[i].room == vm.room) {
+                if (rooms[i].room === vm.room) {
                   vm.room = rooms[i];
                   break;
                 }
