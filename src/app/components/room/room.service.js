@@ -191,7 +191,7 @@
                 var i = 0;
                 var found = false;
                 for (i = 0; i < result.list.length && !found; ++i) {
-                  var rid = result.list[i].id;
+                  var rid = result.list[i].room;
                   if (rid === number) {
                     found = true;
                   }
@@ -202,13 +202,13 @@
                   deferred.resolve(rooms);
                 } else {
                   // must create the room...
-                  var newRoom = {"request": "create", "room": number, "ptype": "publisher", "display": name};
+                  var newRoom = {"request": "create", "room": number, "ptype": "publisher", "description": name, "max_publishers" : 6, "bitrate": 128000 };
                   pluginHandle.send({"message" : newRoom, success: function(res) {
                     if (res.videoroom === "success") {
                       // query again...
                       pluginHandle.send({"message" : request, success: function(resList) {
                         if (resList.videoroom === "success") {
-                          rooms = _.map(result.list, function(r) {
+                          rooms = _.map(resList.list, function(r) {
                             return new Room(r);
                           });
                         }
