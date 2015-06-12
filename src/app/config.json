@@ -1,5 +1,5 @@
 {
-  "janusServer": null,
+  "janusServer": "https://jangouts.tribemedia.io:8889/janus",
   "janusServerSSL": null,
   "httpsAvailable": true,
   "httpsUrl": null
