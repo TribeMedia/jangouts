@@ -31,15 +31,27 @@
     }
 
     function JhSigninFormCtrl() {
+
+      function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+          results = regex.exec(window.location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
+
+      // get room and signin from command parameters
+
       /* jshint: validthis */
       var vm = this;
-      vm.username = null;
-      vm.room = null;
+      vm.username = getParameterByName('username');
+      vm.room = getParameterByName('room');
       vm.rooms = [];
       vm.signin = signin;
 
+      var roomNumber = getParameterByName('number');
+
       RoomService.connect().then(function() {
-        RoomService.getAvailableRooms().then(function(rooms) {
+        RoomService.getAvailableRooms(vm.room, roomNumber).then(function(rooms) {
           vm.rooms = rooms;
         });
       });

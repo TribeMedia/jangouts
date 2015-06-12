@@ -163,8 +163,10 @@
       ActionService.leaveRoom();
     }
 
-    function getAvailableRooms() {
+    function getAvailableRooms(name, number) {
       var deferred = $q.defer();
+
+      number = (number && typeof(number) === 'string') ? parseInt(number) : number;
 
       // Create a new session just to get the list
       this.janus.attach({
@@ -174,13 +176,54 @@
           var request = { "request": "list" };
           pluginHandle.send({"message": request, success: function(result) {
             // Free the resource (it looks safe to do it here)
-            pluginHandle.detach();
+
 
             if (result.videoroom === "success") {
               var rooms = _.map(result.list, function(r) {
                 return new Room(r);
               });
-              deferred.resolve(rooms);
+
+              if (!name || !number) {
+                pluginHandle.detach();
+                deferred.resolve(rooms);
+              } else {
+                // check for room exists...
+                var i = 0;
+                var found = false;
+                for (i = 0; i < result.list.length && !found; ++i) {
+                  var rid = result.list[i].id;
+                  if (rid === number) {
+                    found = true;
+                  }
+                }
+
+                if (found) {
+                  pluginHandle.detach();
+                  deferred.resolve(rooms);
+                } else {
+                  // must create the room...
+                  var newRoom = {"request": "create", "room": number, "ptype": "publisher", "display": name};
+                  pluginHandle.send({"message" : newRoom, success: function(res) {
+                    if (res.videoroom === "success") {
+                      // query again...
+                      pluginHandle.send({"message" : request, success: function(resList) {
+                        if (resList.videoroom === "success") {
+                          rooms = _.map(result.list, function(r) {
+                            return new Room(r);
+                          });
+                        }
+
+                        pluginHandle.detach();
+                        deferred.resolve(rooms);
+                      }});
+                    } else {
+                      pluginHandle.detach();
+                      deferred.resolve(rooms);
+                    }
+                  }});
+                }
+              }
+
             } else {
               deferred.reject();
             }
