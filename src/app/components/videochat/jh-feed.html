@@ -1,15 +1,22 @@
 <figure ng-class="{'own-feed': vm.feed.isPublisher}">
     <video
       autoplay
+      class="thumb"
       ng-class="{mirrored: vm.mirrored}"
       poster="assets/images/placeholder.png"
-      ng-show="vm.isVideoVisible()">
+      ng-show="vm.thumbnailTag() === 'video'">
     </video>
-    <video
-      class="placeholder"
-      poster="assets/images/placeholder.png"
-      ng-hide="vm.isVideoVisible()">
-    </video>
+    <canvas
+      class="thumb"
+      ng-class="{mirrored: vm.mirrored}"
+      ng-show="vm.thumbnailTag() === 'picture'">
+    </canvas>
+    <img
+      ng-src="assets/images/placeholder.png"
+      class="thumb"
+      ng-class="{mirrored: vm.mirrored}"
+      ng-show="vm.thumbnailTag() === 'placeholder'">
+    </img>
     <figcaption>
       {{ vm.feed.display }}
 
@@ -54,7 +61,7 @@
           class="btn btn-xs btn-default"
           ng-click="vm.clickFn()"
           title="Highlight feed"
-          ng-show="!vm.highlighted && !vm.feed.isIgnored">
+          ng-show="!vm.highlightedByUser && !vm.feed.isIgnored">
           <span class="glyphicon glyphicon-arrow-up"></span>
         </button>
         <button
@@ -62,7 +69,7 @@
           class="btn btn-xs btn-danger"
           ng-click="vm.clickFn()"
           title="Un-highlight feed"
-          ng-show="vm.highlighted">
+          ng-show="vm.highlightedByUser">
           <span class="glyphicon glyphicon-arrow-up"></span>
         </button>
 

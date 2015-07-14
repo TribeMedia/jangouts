@@ -12,19 +12,17 @@
     .controller('MainCtrl',  MainCtrl);
 
   MainCtrl.$inject = ['$scope', 'blockUI', 'UserService', 'RoomService',
-    'LogService', 'hotkeys'];
+    'LogService', 'hotkeys', 'jhConfig'];
 
-  function MainCtrl($scope, blockUI, UserService, RoomService, LogService, hotkeys) {
+  function MainCtrl($scope, blockUI, UserService, RoomService, LogService, hotkeys, jhConfig) {
     $scope.data = {
       logEntries: function() {
         return LogService.allEntries();
-      },
-      highlightedByUser: null,
-      highlighted: null,
-      isConsentDialogOpen: null
+      }
     };
     $scope.enter = enter;
 
+    jhConfig.videoThumbnails = true;
     $scope.enter();
 
     $scope.$on('room.error', function(evt, error) {
@@ -64,7 +62,7 @@
       .add({
         combo: 'alt+q',
         description: 'Sign out',
-        callback: function() { UserService.signout();; }
+        callback: function() { UserService.signout(); }
       });
     $scope.hotkeys = hotkeys;
 
@@ -116,7 +114,4 @@ function adjustScreenHeight () {
   $("#jh-chat-messages").css({
     height: finalHeightChat + 'px'
   });
-
 }
-
-
